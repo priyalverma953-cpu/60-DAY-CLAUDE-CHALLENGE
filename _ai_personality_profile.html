@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Space Grotesk', sans-serif;
+    background: #0a0a12;
+    color: #e8e6f0;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  .page {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 2.5rem 1.5rem 3rem;
+  }
+
+  /* ── HERO PORTRAIT ── */
+  .portrait-section {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 2rem;
+    align-items: center;
+    margin-bottom: 2.5rem;
+  }
+
+  .portrait-frame {
+    position: relative;
+    width: 200px;
+    height: 200px;
+  }
+
+  .portrait-canvas {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    display: block;
+  }
+
+  .portrait-ring {
+    position: absolute;
+    inset: -6px;
+    border-radius: 50%;
+    border: 2px solid transparent;
+    background: linear-gradient(135deg, #7c5fe6, #3ecfaa, #e66a9e) border-box;
+    -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: destination-out;
+    mask-composite: exclude;
+    animation: rotatering 6s linear infinite;
+  }
+
+  @keyframes rotatering {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  .hero-text { flex: 1; }
+
+  .role-tag {
+    display: inline-block;
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: #3ecfaa;
+    border: 1px solid #3ecfaa44;
+    padding: 3px 10px;
+    border-radius: 20px;
+    margin-bottom: 0.75rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .hero-name {
+    font-size: 2.4rem;
+    font-weight: 700;
+    line-height: 1.1;
+    background: linear-gradient(120deg, #fff 40%, #a89cf5);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 0.5rem;
+  }
+
+  .hero-sub {
+    font-size: 0.95rem;
+    color: #8a87a8;
+    margin-bottom: 1.25rem;
+  }
+
+  .hero-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .badge {
+    font-size: 12px;
+    font-weight: 500;
+    padding: 4px 12px;
+    border-radius: 20px;
+    border: 1px solid;
+  }
+
+  .badge-purple { color: #c2b6f8; border-color: #5d4faa; background: #1e1a38; }
+  .badge-teal   { color: #7fe8cb; border-color: #2a7a5e; background: #0d2520; }
+  .badge-pink   { color: #f2a4c5; border-color: #7a2e52; background: #2a0e1c; }
+  .badge-amber  { color: #f5ca7a; border-color: #7a5212; background: #261b07; }
+
+  /* ── DIVIDER ── */
+  .divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, #3ecfaa44, #7c5fe644, transparent);
+    margin: 2rem 0;
+  }
+
+  /* ── SECTION LABEL ── */
+  .section-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #3ecfaa;
+    margin-bottom: 1rem;
+  }
+
+  /* ── PERSONALITY DNA ── */
+  .dna-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 2.5rem;
+  }
+
+  .dna-card {
+    background: #12111f;
+    border: 1px solid #2a2840;
+    border-radius: 14px;
+    padding: 1.1rem 1rem;
+    text-align: center;
+    transition: border-color 0.3s;
+  }
+
+  .dna-card:hover { border-color: #7c5fe666; }
+
+  .dna-icon {
+    font-size: 26px;
+    margin-bottom: 0.5rem;
+    display: block;
+  }
+
+  .dna-trait {
+    font-size: 13px;
+    font-weight: 600;
+    color: #d8d4f8;
+    margin-bottom: 4px;
+  }
+
+  .dna-desc {
+    font-size: 11px;
+    color: #6a677f;
+    line-height: 1.5;
+  }
+
+  /* ── SKILLS RADAR ── */
+  .skills-section { margin-bottom: 2.5rem; }
+
+  .skill-row {
+    display: grid;
+    grid-template-columns: 100px 1fr 36px;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 10px;
+  }
+
+  .skill-name {
+    font-size: 13px;
+    color: #b0adc8;
+    font-family: 'Space Mono', monospace;
+  }
+
+  .skill-bar-track {
+    height: 6px;
+    background: #1e1c2e;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  .skill-bar-fill {
+    height: 100%;
+    border-radius: 10px;
+    animation: growbar 1.4s cubic-bezier(0.4,0,0.2,1) forwards;
+    transform-origin: left;
+  }
+
+  @keyframes growbar {
+    from { width: 0; }
+    to { width: var(--w); }
+  }
+
+  .skill-pct {
+    font-size: 11px;
+    color: #5a5870;
+    font-family: 'Space Mono', monospace;
+    text-align: right;
+  }
+
+  /* ── 60-DAY MISSION ── */
+  .mission-card {
+    background: #0e1a24;
+    border: 1px solid #1e3d4f;
+    border-radius: 16px;
+    padding: 1.5rem;
+    margin-bottom: 2.5rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .mission-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #3ecfaa, #7c5fe6);
+  }
+
+  .mission-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: #e8e6f0;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .mission-steps {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  }
+
+  .mission-step {
+    background: #0a1520;
+    border: 1px solid #1c3040;
+    border-radius: 10px;
+    padding: 0.9rem;
+  }
+
+  .step-num {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    color: #3ecfaa;
+    margin-bottom: 6px;
+  }
+
+  .step-text {
+    font-size: 12px;
+    color: #8a9ab8;
+    line-height: 1.5;
+  }
+
+  /* ── IDENTITY QUOTE ── */
+  .quote-section {
+    text-align: center;
+    padding: 1.5rem;
+    background: #0f0e1a;
+    border: 1px solid #1e1c30;
+    border-radius: 16px;
+    position: relative;
+  }
+
+  .quote-mark {
+    font-size: 4rem;
+    line-height: 1;
+    color: #7c5fe622;
+    font-family: Georgia, serif;
+    position: absolute;
+    top: 0.3rem;
+    left: 1.2rem;
+  }
+
+  .quote-text {
+    font-size: 1.05rem;
+    font-style: italic;
+    color: #c0bdd8;
+    line-height: 1.7;
+    padding: 0 1rem;
+  }
+
+  .quote-author {
+    margin-top: 0.8rem;
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: #3ecfaa;
+  }
+
+  /* ── AI PORTRAIT SVG ── */
+  .portrait-svg-wrap {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    overflow: hidden;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HERO -->
+  <div class="portrait-section">
+    <div class="portrait-frame">
+      <div class="portrait-ring"></div>
+      <div class="portrait-svg-wrap">
+        <svg viewBox="0 0 200 200" width="200" height="200" xmlns="http://www.w3.org/2000/svg">
+          <!-- Deep space BG -->
+          <rect width="200" height="200" fill="#07091a"/>
+          <!-- Star field -->
+          <circle cx="22" cy="18" r="0.8" fill="#fff" opacity="0.7"/>
+          <circle cx="55" cy="30" r="0.5" fill="#fff" opacity="0.5"/>
+          <circle cx="175" cy="22" r="0.9" fill="#c2b6f8" opacity="0.8"/>
+          <circle cx="160" cy="50" r="0.5" fill="#fff" opacity="0.4"/>
+          <circle cx="180" cy="72" r="0.7" fill="#7fe8cb" opacity="0.6"/>
+          <circle cx="30" cy="75" r="0.6" fill="#fff" opacity="0.5"/>
+          <circle cx="10" cy="110" r="0.5" fill="#c2b6f8" opacity="0.5"/>
+          <circle cx="190" cy="130" r="0.6" fill="#fff" opacity="0.4"/>
+
+          <!-- Nebula glow -->
+          <ellipse cx="100" cy="85" rx="70" ry="55" fill="url(#nebglow)" opacity="0.22"/>
+          <defs>
+            <radialGradient id="nebglow" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#7c5fe6"/>
+              <stop offset="100%" stop-color="transparent"/>
+            </radialGradient>
+            <radialGradient id="skinglow" cx="50%" cy="40%" r="60%">
+              <stop offset="0%" stop-color="#f5c8a0"/>
+              <stop offset="100%" stop-color="#c8845a"/>
+            </radialGradient>
+            <radialGradient id="hairgrad" cx="50%" cy="20%" r="70%">
+              <stop offset="0%" stop-color="#2c1a0e"/>
+              <stop offset="100%" stop-color="#120a04"/>
+            </radialGradient>
+          </defs>
+
+          <!-- Shoulders / body -->
+          <ellipse cx="100" cy="195" rx="62" ry="40" fill="#14103a"/>
+          <ellipse cx="100" cy="185" rx="52" ry="32" fill="#1a1650"/>
+
+          <!-- Neck -->
+          <rect x="88" y="150" width="24" height="28" rx="6" fill="url(#skinglow)"/>
+
+          <!-- Hair (back layer) -->
+          <ellipse cx="100" cy="90" rx="52" ry="58" fill="url(#hairgrad)"/>
+          <!-- Long hair sides -->
+          <path d="M52 100 Q40 145 48 185" stroke="#180f06" stroke-width="18" fill="none" stroke-linecap="round"/>
+          <path d="M148 100 Q160 145 152 185" stroke="#180f06" stroke-width="18" fill="none" stroke-linecap="round"/>
+
+          <!-- Face -->
+          <ellipse cx="100" cy="105" rx="40" ry="46" fill="url(#skinglow)"/>
+
+          <!-- Hair top / forehead -->
+          <ellipse cx="100" cy="68" rx="42" ry="24" fill="url(#hairgrad)"/>
+          <path d="M58 75 Q70 55 100 60 Q130 55 142 75" fill="#1a0e06"/>
+
+          <!-- Ears -->
+          <ellipse cx="60" cy="108" rx="6" ry="9" fill="#c8845a"/>
+          <ellipse cx="140" cy="108" rx="6" ry="9" fill="#c8845a"/>
+
+          <!-- Eyes with AI glow -->
+          <!-- Left eye -->
+          <ellipse cx="84" cy="105" rx="11" ry="8" fill="#1a0f06"/>
+          <ellipse cx="84" cy="105" rx="8" ry="6" fill="#0e1528"/>
+          <circle cx="84" cy="105" r="4.5" fill="#7c5fe6" opacity="0.9"/>
+          <circle cx="84" cy="105" r="2.5" fill="#c2b6f8"/>
+          <circle cx="86" cy="103" r="1.2" fill="white" opacity="0.9"/>
+          <!-- Lashes left -->
+          <path d="M73 100 Q78 96 84 97" stroke="#1a0e06" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+
+          <!-- Right eye -->
+          <ellipse cx="116" cy="105" rx="11" ry="8" fill="#1a0f06"/>
+          <ellipse cx="116" cy="105" rx="8" ry="6" fill="#0e1528"/>
+          <circle cx="116" cy="105" r="4.5" fill="#7c5fe6" opacity="0.9"/>
+          <circle cx="116" cy="105" r="2.5" fill="#c2b6f8"/>
+          <circle cx="118" cy="103" r="1.2" fill="white" opacity="0.9"/>
+          <!-- Lashes right -->
+          <path d="M127 100 Q122 96 116 97" stroke="#1a0e06" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+
+          <!-- Eyebrows -->
+          <path d="M74 96 Q84 91 94 93" stroke="#2a1a0a" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+          <path d="M106 93 Q116 91 126 96" stroke="#2a1a0a" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+
+          <!-- Nose -->
+          <path d="M98 110 Q96 120 100 125 Q104 120 102 110" stroke="#b07550" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+
+          <!-- Lips -->
+          <path d="M88 135 Q100 141 112 135" stroke="#d4785a" stroke-width="2" fill="none" stroke-linecap="round"/>
+          <path d="M90 135 Q100 131 110 135" stroke="#d4785a" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+
+          <!-- AI circuit lines floating near portrait -->
+          <path d="M12 140 L30 140 L30 155 L45 155" stroke="#3ecfaa" stroke-width="0.8" fill="none" opacity="0.5"/>
+          <circle cx="45" cy="155" r="2" fill="#3ecfaa" opacity="0.7"/>
+          <path d="M188 140 L170 140 L170 155 L155 155" stroke="#7c5fe6" stroke-width="0.8" fill="none" opacity="0.5"/>
+          <circle cx="155" cy="155" r="2" fill="#7c5fe6" opacity="0.7"/>
+
+          <!-- Tiny floating data nodes -->
+          <circle cx="25" cy="55" r="3" fill="none" stroke="#3ecfaa" stroke-width="0.8" opacity="0.6"/>
+          <circle cx="175" cy="90" r="3" fill="none" stroke="#e66a9e" stroke-width="0.8" opacity="0.6"/>
+          <circle cx="15" cy="160" r="2" fill="#3ecfaa" opacity="0.4"/>
+
+          <!-- Headband / highlight on hair -->
+          <path d="M60 72 Q100 58 140 72" stroke="#3ecfaa" stroke-width="1.5" fill="none" opacity="0.35"/>
+        </svg>
+      </div>
+    </div>
+
+    <div class="hero-text">
+      <div class="role-tag">AI/ML Engineer in training</div>
+      <div class="hero-name">Priyal Verma</div>
+      <div class="hero-sub">Computer Science Engineering · AI/ML Track</div>
+      <div class="hero-badges">
+        <span class="badge badge-purple">Python</span>
+        <span class="badge badge-teal">AI / ML</span>
+        <span class="badge badge-pink">DSA</span>
+        <span class="badge badge-amber">C</span>
+        <span class="badge badge-purple">GitHub Builder</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- PERSONALITY DNA -->
+  <div class="section-label">Personality DNA</div>
+  <div class="dna-grid">
+    <div class="dna-card">
+      <span class="dna-icon">🔭</span>
+      <div class="dna-trait">Curious</div>
+      <div class="dna-desc">Digs deep into how things work, not just that they work</div>
+    </div>
+    <div class="dna-card">
+      <span class="dna-icon">⚡</span>
+      <div class="dna-trait">Hardworking</div>
+      <div class="dna-desc">Consistent, disciplined, shows up even when it's hard</div>
+    </div>
+    <div class="dna-card">
+      <span class="dna-icon">🧩</span>
+      <div class="dna-trait">Problem-solver</div>
+      <div class="dna-desc">Loves the challenge. Bugs are just puzzles waiting to fall</div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- SKILLS -->
+  <div class="skills-section">
+    <div class="section-label">Skill Signals</div>
+    <div class="skill-row">
+      <span class="skill-name">Python</span>
+      <div class="skill-bar-track"><div class="skill-bar-fill" style="--w:88%; background: linear-gradient(90deg,#7c5fe6,#a89cf5);"></div></div>
+      <span class="skill-pct">88%</span>
+    </div>
+    <div class="skill-row">
+      <span class="skill-name">AI / ML</span>
+      <div class="skill-bar-track"><div class="skill-bar-fill" style="--w:72%; background: linear-gradient(90deg,#3ecfaa,#7fe8cb);"></div></div>
+      <span class="skill-pct">72%</span>
+    </div>
+    <div class="skill-row">
+      <span class="skill-name">DSA</span>
+      <div class="skill-bar-track"><div class="skill-bar-fill" style="--w:78%; background: linear-gradient(90deg,#e66a9e,#f2a4c5);"></div></div>
+      <span class="skill-pct">78%</span>
+    </div>
+    <div class="skill-row">
+      <span class="skill-name">C Lang</span>
+      <div class="skill-bar-track"><div class="skill-bar-fill" style="--w:65%; background: linear-gradient(90deg,#e8a830,#f5ca7a);"></div></div>
+      <span class="skill-pct">65%</span>
+    </div>
+    <div class="skill-row">
+      <span class="skill-name">GitHub</span>
+      <div class="skill-bar-track"><div class="skill-bar-fill" style="--w:60%; background: linear-gradient(90deg,#3ecfaa,#7c5fe6);"></div></div>
+      <span class="skill-pct">60%</span>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- 60-DAY MISSION -->
+  <div class="mission-card">
+    <div class="mission-title">
+      <span style="color:#3ecfaa;font-size:18px;">🎯</span>
+      60-Day Mission
+    </div>
+    <div class="mission-steps">
+      <div class="mission-step">
+        <div class="step-num">PHASE 01</div>
+        <div class="step-text">Learn AI tools deeply — understand LLMs, frameworks, and pipelines from first principles</div>
+      </div>
+      <div class="mission-step">
+        <div class="step-num">PHASE 02</div>
+        <div class="step-text">Ship real projects — move from tutorials to building things that solve actual problems</div>
+      </div>
+      <div class="mission-step">
+        <div class="step-num">PHASE 03</div>
+        <div class="step-text">Grow GitHub — document every project, push daily, build a portfolio that speaks for itself</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- IDENTITY QUOTE -->
+  <div class="quote-section">
+    <span class="quote-mark">"</span>
+    <div class="quote-text">I don't just want to use AI. I want to understand it, build with it, and one day — shape what it becomes.</div>
+    <div class="quote-author">— Priyal Verma · AI/ML Engineer in Training</div>
+  </div>
+
+</div>
+</body>
+</html>
