@@ -1,0 +1,186 @@
+
+<style>
+  * { box-sizing: border-box; }
+  .pe-wrap { font-family: var(--font-sans); padding: 24px 0 32px; }
+  .pe-hero { text-align: center; margin-bottom: 28px; }
+  .pe-hero h1 { font-size: 22px; font-weight: 500; color: var(--color-text-primary); margin: 0 0 6px; }
+  .pe-hero p { font-size: 14px; color: var(--color-text-secondary); margin: 0; }
+  .section-label { font-size: 11px; font-weight: 500; letter-spacing: .06em; text-transform: uppercase; color: var(--color-text-tertiary); margin: 0 0 10px; }
+  .anatomy { background: var(--color-background-secondary); border-radius: var(--border-radius-lg); border: 0.5px solid var(--color-border-tertiary); padding: 18px 20px; margin-bottom: 20px; }
+  .prompt-bar { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 14px; }
+  .pt { border-radius: 6px; padding: 6px 12px; font-size: 13px; font-weight: 500; cursor: pointer; border: 0.5px solid transparent; transition: opacity .2s; user-select: none; }
+  .pt-context   { background: #EEEDFE; color: #3C3489; border-color: #AFA9EC; }
+  .pt-instruct  { background: #E1F5EE; color: #085041; border-color: #5DCAA5; }
+  .pt-examples  { background: #FAEEDA; color: #633806; border-color: #EF9F27; }
+  .pt-output    { background: #FAECE7; color: #712B13; border-color: #F0997B; }
+  @media (prefers-color-scheme: dark) {
+    .pt-context  { background: #26215C; color: #CECBF6; border-color: #534AB7; }
+    .pt-instruct { background: #04342C; color: #9FE1CB; border-color: #0F6E56; }
+    .pt-examples { background: #412402; color: #FAC775; border-color: #BA7517; }
+    .pt-output   { background: #4A1B0C; color: #F5C4B3; border-color: #993C1D; }
+  }
+  .pt.dim { opacity: .3; }
+  .part-desc { min-height: 52px; font-size: 13px; color: var(--color-text-secondary); line-height: 1.6; padding: 10px 14px; background: var(--color-background-primary); border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-tertiary); }
+  .tech-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; margin-bottom: 20px; }
+  .tech-card { background: var(--color-background-secondary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 14px 14px 12px; cursor: pointer; transition: border-color .15s; }
+  .tech-card:hover { border-color: var(--color-border-primary); }
+  .tech-card.active { border-color: var(--color-border-info); background: var(--color-background-info); }
+  .tech-card h3 { font-size: 13px; font-weight: 500; color: var(--color-text-primary); margin: 0 0 4px; }
+  .tech-card p { font-size: 12px; color: var(--color-text-secondary); margin: 0; line-height: 1.5; }
+  .tech-card.active h3 { color: var(--color-text-info); }
+  .example-box { background: var(--color-background-secondary); border-radius: var(--border-radius-lg); border: 0.5px solid var(--color-border-tertiary); padding: 16px 20px; margin-bottom: 20px; }
+  .ex-label { font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: .06em; color: var(--color-text-tertiary); margin-bottom: 8px; }
+  .ex-row { display: flex; gap: 12px; align-items: flex-start; }
+  .ex-side { flex: 1; }
+  .ex-code { font-family: var(--font-mono); font-size: 12px; background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-md); padding: 10px 12px; line-height: 1.7; color: var(--color-text-secondary); white-space: pre-wrap; }
+  .ex-code .hl { color: var(--color-text-primary); font-weight: 500; }
+  .bad { border-left: 3px solid #E24B4A; }
+  .good { border-left: 3px solid #1D9E75; }
+  .bad-label { font-size: 11px; font-weight: 500; color: #A32D2D; margin-bottom: 6px; }
+  .good-label { font-size: 11px; font-weight: 500; color: #0F6E56; margin-bottom: 6px; }
+  @media (prefers-color-scheme: dark) {
+    .bad-label { color: #F09595; }
+    .good-label { color: #5DCAA5; }
+  }
+  .vs { font-size: 11px; font-weight: 500; color: var(--color-text-tertiary); align-self: center; padding: 0 2px; }
+  .tip-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 8px; }
+  .tip-list li { display: flex; align-items: flex-start; gap: 10px; font-size: 13px; color: var(--color-text-secondary); line-height: 1.5; }
+  .tip-dot { width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 500; flex-shrink: 0; margin-top: 1px; }
+  .td1 { background: #EEEDFE; color: #534AB7; }
+  .td2 { background: #E1F5EE; color: #0F6E56; }
+  .td3 { background: #FAEEDA; color: #854F0B; }
+  .td4 { background: #FAECE7; color: #993C1D; }
+  .td5 { background: #E6F1FB; color: #185FA5; }
+  @media (prefers-color-scheme: dark) {
+    .td1 { background: #26215C; color: #CECBF6; }
+    .td2 { background: #04342C; color: #9FE1CB; }
+    .td3 { background: #412402; color: #FAC775; }
+    .td4 { background: #4A1B0C; color: #F5C4B3; }
+    .td5 { background: #042C53; color: #B5D4F4; }
+  }
+  .chain-svg { width: 100%; margin-bottom: 20px; }
+  .tips-box { background: var(--color-background-secondary); border-radius: var(--border-radius-lg); border: 0.5px solid var(--color-border-tertiary); padding: 16px 20px; }
+</style>
+
+<div class="pe-wrap">
+  <h2 class="sr-only">Prompt Engineering: A visual explainer covering anatomy of a prompt, key techniques, good vs bad examples, and tips.</h2>
+
+  <div class="pe-hero">
+    <h1>Prompt Engineering</h1>
+    <p>The art of crafting inputs to get the best outputs from an AI model</p>
+  </div>
+
+  <!-- Anatomy -->
+  <div class="anatomy">
+    <div class="section-label">Anatomy of a prompt — click each part</div>
+    <div class="prompt-bar">
+      <span class="pt pt-context"   onclick="highlight('context')">Context</span>
+      <span class="pt pt-instruct"  onclick="highlight('instruct')">Instruction</span>
+      <span class="pt pt-examples"  onclick="highlight('examples')">Examples</span>
+      <span class="pt pt-output"    onclick="highlight('output')">Output format</span>
+    </div>
+    <div class="part-desc" id="desc">Click a part above to learn what it does in a prompt.</div>
+  </div>
+
+  <!-- Key Techniques -->
+  <div class="section-label">Key techniques</div>
+  <div class="tech-grid" id="tech-grid">
+    <div class="tech-card" onclick="selectTech(this, 'Zero-shot', 'Give the model a task with no examples. Works well when the task is clearly stated and within the model\'s training.')">
+      <h3>Zero-shot</h3>
+      <p>Task only, no examples given</p>
+    </div>
+    <div class="tech-card" onclick="selectTech(this, 'Few-shot', 'Provide 2–5 input→output examples before your real request. Teaches the model the format, style, and reasoning pattern you want.')">
+      <h3>Few-shot</h3>
+      <p>Include 2–5 examples inline</p>
+    </div>
+    <div class="tech-card" onclick="selectTech(this, 'Chain of Thought', 'Add "Think step by step" or show a worked example. Forces the model to reason through the problem before answering — dramatically improves accuracy on hard tasks.')">
+      <h3>Chain of thought</h3>
+      <p>Ask it to reason step by step</p>
+    </div>
+    <div class="tech-card" onclick="selectTech(this, 'Role prompting', 'Assign a persona: "You are a senior tax attorney…" Sets the model\'s knowledge register, vocabulary, and response style to match.')">
+      <h3>Role prompting</h3>
+      <p>Assign an expert persona</p>
+    </div>
+    <div class="tech-card" onclick="selectTech(this, 'Output structuring', 'Specify exact format: JSON, bullet list, table, XML tags. Especially useful when the response will be parsed by code.')">
+      <h3>Output structuring</h3>
+      <p>Demand JSON, tables, tags</p>
+    </div>
+    <div class="tech-card" onclick="selectTech(this, 'Prompt chaining', 'Break a complex task into a pipeline of smaller prompts, each using the previous output as input. Keeps each step focused and auditable.')">
+      <h3>Prompt chaining</h3>
+      <p>Pipeline of smaller prompts</p>
+    </div>
+  </div>
+  <div class="part-desc" id="tech-desc" style="margin-bottom:20px">Click a technique above to see how it works.</div>
+
+  <!-- Good vs Bad -->
+  <div class="example-box">
+    <div class="section-label">Weak vs strong prompts</div>
+    <div class="ex-row">
+      <div class="ex-side">
+        <div class="bad-label">✗ Too vague</div>
+        <div class="ex-code bad">Write something about climate.</div>
+      </div>
+      <div class="vs">vs</div>
+      <div class="ex-side">
+        <div class="good-label">✓ Specific & structured</div>
+        <div class="ex-code good"><span class="hl">You are a science journalist</span> writing for a general audience. <span class="hl">Summarise in 3 bullet points</span> the main causes of Arctic sea-ice loss since 2000, <span class="hl">citing one key statistic per point</span>. Avoid jargon.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tips -->
+  <div class="tips-box">
+    <div class="section-label">Five rules of thumb</div>
+    <ul class="tip-list">
+      <li><span class="tip-dot td1">1</span><span><strong style="color:var(--color-text-primary);font-weight:500">Be specific.</strong> Vague prompts get vague answers. State the exact task, audience, length, and tone.</span></li>
+      <li><span class="tip-dot td2">2</span><span><strong style="color:var(--color-text-primary);font-weight:500">Show, don't tell.</strong> A worked example teaches format better than describing it in words.</span></li>
+      <li><span class="tip-dot td3">3</span><span><strong style="color:var(--color-text-primary);font-weight:500">Assign a role.</strong> "Act as a senior data scientist" primes a more expert register than asking bare.</span></li>
+      <li><span class="tip-dot td4">4</span><span><strong style="color:var(--color-text-primary);font-weight:500">Ask for reasoning first.</strong> "Think step by step before answering" reduces errors on multi-step problems.</span></li>
+      <li><span class="tip-dot td5">5</span><span><strong style="color:var(--color-text-primary);font-weight:500">Iterate.</strong> Treat your prompt like code — test, observe the failure mode, patch one variable at a time.</span></li>
+    </ul>
+  </div>
+</div>
+
+<script>
+const partInfo = {
+  context: {
+    label: 'Context',
+    text: 'Background information the model needs to answer well — who you are, the situation, constraints, or relevant data. The richer the context, the fewer wrong assumptions the model makes.',
+    other: ['instruct','examples','output']
+  },
+  instruct: {
+    label: 'Instruction',
+    text: 'The core directive: exactly what you want the model to DO. Use active verbs — "summarise", "classify", "rewrite", "list". This is the most important part of any prompt.',
+    other: ['context','examples','output']
+  },
+  examples: {
+    label: 'Examples (few-shot)',
+    text: 'One or more input→output pairs that show the model the pattern. Examples are more powerful than descriptions — they teach format, tone, and logic simultaneously.',
+    other: ['context','instruct','output']
+  },
+  output: {
+    label: 'Output format',
+    text: 'Tells the model how to structure its response — JSON, a markdown table, numbered list, XML tags, a single word. Critical when the output will be parsed by code.',
+    other: ['context','instruct','examples']
+  }
+};
+
+function highlight(part) {
+  const info = partInfo[part];
+  document.getElementById('desc').textContent = info.label + ': ' + info.text;
+  document.querySelectorAll('.pt').forEach(el => el.classList.remove('dim'));
+  info.other.forEach(id => {
+    document.querySelector('.pt-' + id.replace('instruct','instruct').replace('output','output'))
+  });
+  document.querySelectorAll('.pt').forEach(el => {
+    const matches = el.onclick.toString().includes("'" + part + "'");
+    el.classList.toggle('dim', !matches);
+  });
+}
+
+function selectTech(el, name, desc) {
+  document.querySelectorAll('.tech-card').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('tech-desc').textContent = name + ': ' + desc;
+}
+</script>
